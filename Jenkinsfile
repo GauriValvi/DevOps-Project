@@ -27,14 +27,12 @@ pipeline {
             }
         }
 
-        stage('Deploy Container') {
-            steps {
-                // Stop and remove old container if it exists
-                sh "docker rm -f $CONTAINER_NAME || true"
-                // Run the new container
-                sh "docker run -d --name $CONTAINER_NAME -p 3000:3000 $IMAGE_NAME"
-            }
-        }
+stage('Deploy Container') {
+    steps {
+        sh "docker ps -q --filter name=devops-app | grep -q . && docker rm -f devops-app || true"
+        sh "docker run -d --name devops-app -p 3000:3000 dockerusergauri/devops-app"
+    }
+}
 
     }
 
