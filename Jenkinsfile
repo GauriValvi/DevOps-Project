@@ -22,17 +22,17 @@ pipeline {
             }
         }
 
-        stage('Deploy Container') {
-            steps {
-                // Stop and remove old container
-                sh '''
-                    docker stop devops-app || true
-                    docker rm devops-app || true
-                '''
-                // Run new container (add -v for development hot-reload if needed)
-                sh 'docker run -d -p 3000:3000 --name devops-app dockerusergauri/devops-app'
-            }
-        }
+stage('Deploy Container') {
+    steps {
+        sh '''
+            # Stop and remove any container using port 3000
+            docker ps -q --filter "publish=3000" | xargs -r docker rm -f
+
+            # Run the new container
+            docker run -d -p 3000:3000 --name devops-app dockerusergauri/devops-app
+        '''
+    }
+}
 
     }
 }
