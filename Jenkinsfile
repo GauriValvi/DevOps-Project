@@ -22,11 +22,13 @@ pipeline {
             }
         }
 
-stage('Deploy Container') {
+    stage('Deploy Container') {
     steps {
         sh '''
-            # Stop and remove any container using port 3000
-            docker ps -q --filter "publish=3000" | xargs -r docker rm -f
+            # Remove any existing container named devops-app
+            if [ $(docker ps -aq -f name=devops-app) ]; then
+                docker rm -f devops-app
+            fi
 
             # Run the new container
             docker run -d -p 3000:3000 --name devops-app dockerusergauri/devops-app
