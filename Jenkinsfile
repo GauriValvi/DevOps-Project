@@ -22,5 +22,17 @@ pipeline {
             }
         }
 
+        stage('Deploy Container') {
+            steps {
+                // Stop and remove old container
+                sh '''
+                    docker stop devops-app || true
+                    docker rm devops-app || true
+                '''
+                // Run new container (add -v for development hot-reload if needed)
+                sh 'docker run -d -p 3000:3000 --name devops-app dockerusergauri/devops-app'
+            }
+        }
+
     }
 }
