@@ -9,14 +9,18 @@ pipeline {
             }
         }
 
-        stage('Push Image') {
-            steps {
-                withCredentials([string(credentialsId: 'dockerhub-pass', variable: 'PASS')]) {
-                    sh 'echo $PASS | docker login -u dockerusergauri --password-stdin'
-                    sh 'docker push dockerusergauri/devops-app'
-                }
-            }
+stage('Push Image') {
+    steps {
+        withCredentials([usernamePassword(
+            credentialsId: 'dockerhub-pass',
+            usernameVariable: 'USER',
+            passwordVariable: 'PASS'
+        )]) {
+            sh 'echo $PASS | docker login -u $USER --password-stdin'
+            sh 'docker push dockerusergauri/devops-app'
         }
+    }
+}
 
     }
 }
