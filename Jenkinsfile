@@ -12,7 +12,7 @@ pipeline {
         stage('Push Image') {
             steps {
                 withCredentials([string(credentialsId: 'dockerhub-pass', variable: 'PASS')]) {
-                    sh 'docker login -u dockerusergauri -p $PASS'
+                    sh 'echo $PASS | docker login -u dockerusergauri --password-stdin'
                     sh 'docker push dockerusergauri/devops-app'
                 }
             }
